@@ -1,21 +1,12 @@
 import React from 'react';
 import { Table } from 'react-bootstrap';
-
-import { useDispatch, useSelector } from 'react-redux';
-
-import { selectAllUsers } from '../../redux-store/usersSlice';
+import { useGetUsersQuery } from '../../redux-store/usersSlice';
 
 import './styles';
 
 const Users = () => {
-  const dispatch = useDispatch();
-  const { users, status } = useSelector((state) => state.users);
-
-  // React.useEffect(() => {
-  //   fetchUsers().then((res) => setUsers(res?.data || []));
-  // }, []);
-
-  console.log('users', users);
+  const { data, error, isLoading } = useGetUsersQuery(null);
+  const users = data?.data || [];
 
   return (
     <React.Fragment>
@@ -23,15 +14,17 @@ const Users = () => {
       <Table striped bordered hover responsive className="users-table">
         <thead>
           <tr>
-            <td>Id</td>
-            <td>Name</td>
+            <td>First Name</td>
+            <td>Last Name</td>
+            <td>Email</td>
           </tr>
         </thead>
         <tbody>
           {users.map((user, id) => (
             <tr key={id}>
-              <td>{user.id}</td>
-              <td>{user.name}</td>
+              <td>{user.first_name}</td>
+              <td>{user.last_name}</td>
+              <td>{user.email}</td>
             </tr>
           ))}
         </tbody>

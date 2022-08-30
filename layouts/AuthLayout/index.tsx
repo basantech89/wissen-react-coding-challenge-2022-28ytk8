@@ -15,6 +15,10 @@ const AuthLayout = () => {
 
   return (
     <div className="auth-layout">
+      <img
+        src="https://drive.google.com/uc?export=view&id=1hvRAGrdq0SqFBZApx2--IcuDf-DOmOBH"
+        alt="wissen-logo"
+      />
       <Outlet />
     </div>
   );

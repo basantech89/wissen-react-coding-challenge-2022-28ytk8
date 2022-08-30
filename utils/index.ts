@@ -4,6 +4,11 @@ export const setItem = (key: string, value: string) =>
 
 export const removeItem = (key: string) => localStorage.removeItem(key);
 
+export const logout = () => {
+  removeItem('token');
+  window.location.reload();
+};
+
 declare interface APIOptions {
   method?: 'GET' | 'POST';
   data?: object;

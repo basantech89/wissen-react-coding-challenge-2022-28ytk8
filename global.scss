@@ -1,6 +1,11 @@
-$theme-colors: (
+@import '~bootstrap/scss/bootstrap.scss';
+@import '~bootstrap/scss/bootstrap';
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+@import '~bootstrap/scss/mixins';
+
+$custom-colors: (
   primary: #192da1,
 );
 
-@import '~bootstrap/scss/bootstrap.scss';
-@import '~bootstrap/scss/bootstrap';
+$theme-colors: map-merge($theme-colors, $custom-colors);

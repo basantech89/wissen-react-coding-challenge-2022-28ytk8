@@ -40,11 +40,6 @@ const Login = () => {
     }
   };
 
-  const logout = () => {
-    removeItem('token');
-    window.location.reload();
-  };
-
   return (
     <React.Fragment>
       <SmartForm<LoginForm>
@@ -53,10 +48,6 @@ const Login = () => {
         defaultValues={defaultValues}
         className="login-form"
       >
-        <img
-          src="https://drive.google.com/uc?export=view&id=1hvRAGrdq0SqFBZApx2--IcuDf-DOmOBH"
-          alt="wissen-logo"
-        />
         <h6>Hello there, Sign in to continue</h6>
         <SmartInput
           label="Email"

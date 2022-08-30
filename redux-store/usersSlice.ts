@@ -1,37 +1,13 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { fetchUsers } from '../utils';
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-const initialState = {
-  users: [],
-  status: 'idle',
-  error: null,
-};
-
-export const getUsers = createAsyncThunk(
-  'users/getUsers',
-  async () => await fetchUsers()
-);
-
-export const usersSlice = createSlice({
-  name: 'users',
-  initialState,
-  reducers: {},
-  extraReducers(builder) {
-    builder
-      .addCase(getUsers.pending, (state, action) => {
-        state.status = 'pending';
-      })
-      .addCase(getUsers.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        state.users = state.users.concat(action.payload);
-      })
-      .addCase(getUsers.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.error.message;
-      });
-  },
+export const usersApi = createApi({
+  reducerPath: 'usersApi',
+  baseQuery: fetchBaseQuery({ baseUrl: 'https://reqres.in/api/' }),
+  endpoints: (builder) => ({
+    getUsers: builder.query({
+      query: () => `users`,
+    }),
+  }),
 });
 
-export default usersSlice.reducer;
-
-export const selectAllusers = (state) => state.users;
+export const { useGetUsersQuery } = usersApi;
