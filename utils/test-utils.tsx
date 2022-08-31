@@ -1,17 +1,25 @@
 import React, { FC, ReactElement } from 'react';
-import { render, RenderOptions } from '@testing-library/react';
+import { render as rtlRender, RenderOptions } from '@testing-library/react';
 import { Provider } from 'react-redux';
-
+import { MemoryRouter } from 'react-router-dom';
 import store from '../redux-store';
 
-const AllTheProviders: FC<{ children: React.ReactNode }> = ({ children }) => {
-  return <Provider store={store}>{children}</Provider>;
+const render = (
+  ui: ReactElement,
+  options?: Omit<RenderOptions, 'wrapper'> & { route?: string }
+) => {
+  const AllTheProviders: FC<{ children: React.ReactNode }> = ({ children }) => {
+    return (
+      <Provider store={store}>
+        <MemoryRouter initialEntries={[options?.route]}>
+          {children}
+        </MemoryRouter>
+      </Provider>
+    );
+  };
+
+  return rtlRender(ui, { wrapper: AllTheProviders, ...options });
 };
 
-const customRender = (
-  ui: ReactElement,
-  options?: Omit<RenderOptions, 'wrapper'>
-) => render(ui, { wrapper: AllTheProviders, ...options });
-
 export * from '@testing-library/react';
-export { customRender as render };
+export default render;

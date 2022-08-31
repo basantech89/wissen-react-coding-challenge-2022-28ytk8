@@ -7,9 +7,10 @@ import SmartForm, {
   SmartButton,
 } from '../../components/Form';
 
-import { authenticateUser, removeItem, setItem } from '../../utils';
+import { authenticateUser, setItem } from '../../utils';
 
 import './styles';
+import { useToasts } from '../../providers/ToastProvider';
 
 declare interface LoginForm {
   email: string;
@@ -21,22 +22,31 @@ const defaultValues: LoginForm = { email: '', password: '' };
 const Login = () => {
   const navigate = useNavigate();
 
+  const { addToast } = useToasts();
+
   const [hidePass, setHidePass] = React.useState(true);
   const toggleHidePass = () => setHidePass(!hidePass);
 
   const authenticateVisitor = async (formData: LoginForm) => {
     const data = await authenticateUser(formData.email, formData.password);
     if (data?.token) {
+      console.log('login');
+      addToast('You are successfully logged in.');
       await setItem('token', data.token);
       navigate('/users');
+    } else {
+      addToast('Authentication failed.', 'error');
     }
   };
 
   const loginWithValidUser = async () => {
     const data = await authenticateUser('eve.holt@reqres.in', 'cityslicka');
     if (data?.token) {
+      addToast('You are successfully logged in.');
       await setItem('token', data.token);
       navigate('/users');
+    } else {
+      addToast('Authentication failed.', 'error');
     }
   };
 

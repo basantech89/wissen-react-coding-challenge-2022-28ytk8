@@ -8,6 +8,7 @@ import { BrowserRouter } from 'react-router-dom';
 import AppRoutes from './containers/AppRoutes';
 
 import store from './redux-store';
+import { ToastProvider } from './providers/ToastProvider';
 
 const container = document.getElementById('app');
 
@@ -17,9 +18,11 @@ const App = () => {
   return (
     <React.StrictMode>
       <Provider store={store}>
-        <BrowserRouter>
-          <AppRoutes />
-        </BrowserRouter>
+        <ToastProvider>
+          <BrowserRouter>
+            <AppRoutes />
+          </BrowserRouter>
+        </ToastProvider>
       </Provider>
     </React.StrictMode>
   );
