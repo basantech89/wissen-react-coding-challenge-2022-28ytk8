@@ -9,44 +9,25 @@ export const logout = () => {
   window.location.reload();
 };
 
-declare interface APIOptions {
-  method?: 'GET' | 'POST';
-  data?: object;
-  shouldAuthenticate?: boolean;
-}
+export const registerForUserInactivitySession = () => {
+  setInterval(() => {
+    const lastUserActivityTimestamp = getItem('lastUserActivityTimestamp');
+    const currentToken = getItem('token');
 
-const apiCall = (url: string, options?: APIOptions): Promise<Response> => {
-  const { method, data, shouldAuthenticate } = options;
-
-  const headers: HeadersInit = {
-    'Content-type': 'application/json; charset=UTF-8',
-  };
-
-  if (shouldAuthenticate) {
-    const token = getItem('token');
-    headers.Authorization = `Bearer ${token}`;
-  }
-
-  const fetchOptios: Record<string, any> = {
-    method: method ?? 'GET',
-    headers,
-  };
-
-  if (data) {
-    fetchOptios.body = JSON.stringify(data);
-  }
-
-  return fetch(url, fetchOptios).then((res) => res.json());
+    if (lastUserActivityTimestamp && currentToken) {
+      if (Math.ceil((Date.now() - +lastUserActivityTimestamp) / 60000) > 60) {
+        setItem('token', '');
+        setItem('lastLoginTimestamp', ``);
+        window.location.href = '/';
+      }
+    }
+  }, 60000);
 };
 
-export const authenticateUser = (
-  email: string,
-  password: string
-): Promise<any> =>
-  apiCall('https://reqres.in/api/login', {
-    method: 'POST',
-    data: { email, password },
-  });
-
-export const fetchUsers = (): Promise<any> =>
-  apiCall('https://reqres.in/api/unknown', { shouldAuthenticate: true });
+export const registerForUserActivityTracking = () => {
+  const setUserActivityTimeStamp = () => {
+    setItem('lastUserActivityTimestamp', `${Date.now()}`);
+  };
+  window.document.addEventListener('click', setUserActivityTimeStamp);
+  window.document.addEventListener('keypress', setUserActivityTimeStamp);
+};

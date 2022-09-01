@@ -7,14 +7,6 @@ import ProtectedLayout from '../../layouts/ProtectedLayout';
 import Login from '../Login';
 import Users from '../Users';
 
-import { Toast } from 'react-bootstrap';
-
-import { useToasts } from '../../providers/ToastProvider';
-
-declare interface RouteProps {
-  children: React.ReactElement;
-}
-
 const Error = () => (
   <div className="error-container">
     <div className="err-common-img error-img" />
@@ -30,15 +22,8 @@ const Nomatch = () => (
 );
 
 const AppRoutes = () => {
-  const { toast, showToast } = useToasts();
-  console.log('ttttttt', toast, showToast);
-
   return (
     <React.Fragment>
-      <Toast show={showToast} bg={toast?.bg}>
-        <Toast.Body>{toast?.msg}</Toast.Body>
-      </Toast>
-
       <Routes>
         <Route element={<ErrorLayout />}>
           <Route path="/error" exact element={<Error />} />

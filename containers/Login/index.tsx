@@ -1,16 +1,19 @@
 import React from 'react';
+import { useRecoilState } from 'recoil';
 import { useNavigate } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
+
 import SmartForm, {
   SmartCheckbox,
   SmartInput,
   SmartButton,
 } from '../../components/Form';
 
-import { authenticateUser, setItem } from '../../utils';
+import { authenticateUser } from '../../utils/api';
+import { setItem } from '../../utils';
 
 import './styles';
-import { useToasts } from '../../providers/ToastProvider';
+import toastState from '../../atoms/toasts';
 
 declare interface LoginForm {
   email: string;
@@ -20,35 +23,31 @@ declare interface LoginForm {
 const defaultValues: LoginForm = { email: '', password: '' };
 
 const Login = () => {
-  const navigate = useNavigate();
+  const [toasts, setToasts] = useRecoilState(toastState);
+  const addToast = (msg: string, bg = 'success') =>
+    setToasts([...toasts, { msg, bg }]);
 
-  const { addToast } = useToasts();
+  const navigate = useNavigate();
 
   const [hidePass, setHidePass] = React.useState(true);
   const toggleHidePass = () => setHidePass(!hidePass);
 
-  const authenticateVisitor = async (formData: LoginForm) => {
-    const data = await authenticateUser(formData.email, formData.password);
-    if (data?.token) {
-      console.log('login');
-      addToast('You are successfully logged in.');
+  const login = async (email: string, password: string) => {
+    try {
+      const data = await authenticateUser(email, password);
       await setItem('token', data.token);
+      addToast('You are successfully logged in.');
       navigate('/users');
-    } else {
-      addToast('Authentication failed.', 'error');
+    } catch {
+      addToast('Authentication failed.', 'danger');
     }
   };
 
-  const loginWithValidUser = async () => {
-    const data = await authenticateUser('eve.holt@reqres.in', 'cityslicka');
-    if (data?.token) {
-      addToast('You are successfully logged in.');
-      await setItem('token', data.token);
-      navigate('/users');
-    } else {
-      addToast('Authentication failed.', 'error');
-    }
-  };
+  const authenticateVisitor = async (formData: LoginForm) =>
+    await login(formData.email, formData.password);
+
+  const loginWithValidUser = async () =>
+    await login('eve.holt@reqres.in', 'cityslicka');
 
   return (
     <React.Fragment>

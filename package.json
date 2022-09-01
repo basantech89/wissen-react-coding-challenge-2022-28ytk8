@@ -27,6 +27,7 @@
     "react-redux": "^7.2.1 || ^8.0.2",
     "react-router": "6.3.0",
     "react-router-dom": "6.3.0",
+    "recoil": "^0.7.5",
     "redux": "^4",
     "sass": "1.54.6"
   },

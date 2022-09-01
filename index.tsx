@@ -6,9 +6,11 @@ import { Provider } from 'react-redux';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import AppRoutes from './containers/AppRoutes';
+import WissenToast from './components/WissenToast';
 
 import store from './redux-store';
-import { ToastProvider } from './providers/ToastProvider';
+
+import { RecoilRoot } from 'recoil';
 
 const container = document.getElementById('app');
 
@@ -18,11 +20,12 @@ const App = () => {
   return (
     <React.StrictMode>
       <Provider store={store}>
-        <ToastProvider>
+        <RecoilRoot>
           <BrowserRouter>
             <AppRoutes />
+            <WissenToast />
           </BrowserRouter>
-        </ToastProvider>
+        </RecoilRoot>
       </Provider>
     </React.StrictMode>
   );
